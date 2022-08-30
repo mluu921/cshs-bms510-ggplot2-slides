@@ -8,6 +8,7 @@ format:
     menu: true
     overview: true
     chalkboard: true
+    preview-links: auto
 date: "`r format(Sys.Date(), '%B %d, %Y')`"
 chalkboard: true
 cache: false
@@ -16,7 +17,6 @@ cache: false
 ```{r, include = F, echo = F}
 library(tidyverse)
 library(palmerpenguins)
-library(xaringanthemer)
 library(rms)
 library(ggwordcloud)
 library(gganimate)
@@ -95,7 +95,7 @@ local({
       "Beyza",
       "Basia",
       "Maya",
-      "Na",
+      "Na Jeong",
       "Roberta",
       "Nimisha",
       "Elena",
@@ -103,7 +103,7 @@ local({
     )
 
 
-  set.seed(1)
+  set.seed(as.numeric(Sys.Date()))
   data <- tibble(
     names = students,
     values = sample(1:100, length(students), replace = F)
@@ -111,8 +111,8 @@ local({
 
   ggplot(data, aes(
     label = names,
-    size = values,
-    color = values
+    color = values,
+    size = values
   )) +
     geom_text_wordcloud() +
     scale_size_area(max_size = 30) +
@@ -470,7 +470,7 @@ local({
 
   ggplot(data, aes(x = date, y = incidence_7days)) +
     geom_line(size = 1) +
-    scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
+    scale_x_date(date_breaks = "6 months", date_labels = "%b-%Y") +
     theme_light(base_size = 15) +
     theme(
       axis.title = element_text(face = "bold"),
@@ -629,6 +629,7 @@ ggplot(df, aes(x = gender, y = age, fill = gender)) +
 
 ## Components of a Plot
 
+::: incremental
 * The data for the plot comes from the **emergency** dataset
 
 * The plot contains a x and y coordinate system
@@ -639,6 +640,7 @@ ggplot(df, aes(x = gender, y = age, fill = gender)) +
   + The color differs by **gender**
 
 * The plot is being depicted using a **dotplot** (geometries)
+:::
 
 
 ## The Grammar of Graphics  {.smaller}
@@ -646,11 +648,13 @@ ggplot(df, aes(x = gender, y = age, fill = gender)) +
 ::: columns
 
 ::: {.column width='50%'}
+
 * The grammar of graphics was originally proposed by Leland Wilkinson
 
 * A variation of this framework was further proposed by Hadley Wickham which is used in ggplot2
 
 * This framework is a tool that allows us to concisely describe the components of a plot or graphic
+
 :::
 
 ::: {.column width='50%'}
@@ -742,7 +746,7 @@ knitr::include_graphics("figures/ggplot_website.PNG")
 ```
 
 ::: aside
--   https://ggplot2.tidyverse.org/
+-   <https://ggplot2.tidyverse.org/>
 :::
 
 ## Cheatsheet
@@ -752,7 +756,7 @@ knitr::include_graphics("figures/ggplot2_cheatsheet.PNG")
 ```
 
 ::: aside
--   https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf
+-   <https://www.rstudio.com/resources/cheatsheets/>
 :::
 
 ## Book
@@ -762,5 +766,5 @@ knitr::include_graphics("figures/ggplot2_book.PNG")
 ```
 
 ::: aside
--   https://ggplot2-book.org/index.html
+-   <https://ggplot2-book.org/index.html>
 :::
