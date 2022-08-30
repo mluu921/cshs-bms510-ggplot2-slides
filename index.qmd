@@ -95,7 +95,7 @@ local({
       "Beyza",
       "Basia",
       "Maya",
-      "Na",
+      "Na Jeong",
       "Roberta",
       "Nimisha",
       "Elena",
@@ -103,7 +103,7 @@ local({
     )
 
 
-  set.seed(1)
+  set.seed(as.numeric(Sys.Date()))
   data <- tibble(
     names = students,
     values = sample(1:100, length(students), replace = F)
@@ -111,8 +111,8 @@ local({
 
   ggplot(data, aes(
     label = names,
-    size = values,
-    color = values
+    color = values,
+    size = values
   )) +
     geom_text_wordcloud() +
     scale_size_area(max_size = 30) +
@@ -470,7 +470,7 @@ local({
 
   ggplot(data, aes(x = date, y = incidence_7days)) +
     geom_line(size = 1) +
-    scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
+    scale_x_date(date_breaks = "6 months", date_labels = "%b-%Y") +
     theme_light(base_size = 15) +
     theme(
       axis.title = element_text(face = "bold"),
