@@ -1,0 +1,785 @@
+---
+title: "Descriptive Statistics in R"
+subtitle: "Introduction to plotting in the tidyverse: ggplot2"
+author:
+  - "Michael Luu | Marcio Diniz"
+format:
+  revealjs:
+    theme: [default, custom.scss]
+    slide-number: true
+    transition: fade
+    footer: "Introduction to plotting in the tidyverse: ggplot2"
+    menu: true
+    overview: true
+    chalkboard: true
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+chalkboard: true
+---
+
+```{r, include = F, echo = F}
+library(tidyverse)
+library(palmerpenguins)
+library(xaringanthemer)
+library(rms)
+library(ggwordcloud)
+library(gganimate)
+library(broom)
+library(ggrepel)
+library(patchwork)
+library(survminer)
+library(geojsonio)
+library(zoo)
+library(ggtext)
+library(lubridate)
+library(ggsci)
+library(aRtsy)
+
+```
+
+## 
+
+```{r, out.width='70%', echo = F, fig.align='center'}
+knitr::include_graphics("figures/tidyverse_logo.PNG")
+```
+
+# ggplot2
+
+## ggplot2
+
+```{r, echo = F, fig.height=6, fig.width=7, out.width='80%', fig.align='center'}
+
+local({
+  data <- palmerpenguins::penguins
+
+  ggplot(
+    data,
+    aes(
+      x = bill_length_mm,
+      y = flipper_length_mm,
+      color = species
+    )
+  ) +
+    geom_point(aes(shape = species)) +
+    theme_minimal(base_size = 15) +
+    theme(
+      legend.position = "bottom",
+      axis.title = element_text(face = "bold"),
+      plot.title = element_text(face = "bold")
+    ) +
+    geom_smooth(method = "lm", se = F) +
+    labs(
+      x = "Bill length (mm)",
+      y = "Flipper length (mm)",
+      color = NULL,
+      shape = NULL,
+      title = "Flipper and bill length",
+      subtitle = "Dimensions for Adelie, Chinstrap and Gentoo Penguins"
+    ) +
+    ggsci::scale_color_d3()
+})
+```
+
+## ggplot2
+
+```{r, echo = F, fig.height=5, fig.width=7, out.width='80%', fig.align='center'}
+
+local({
+  students <-
+    c(
+      "Huyen",
+      "Giorgia",
+      "Edward",
+      "Natlia",
+      "Xen",
+      "Janice",
+      "Emily",
+      "Irina",
+      "Deepika"
+    )
+
+
+  set.seed(1)
+  data <- tibble(
+    names = students,
+    values = sample(1:100, length(students), replace = F)
+  )
+
+  ggplot(data, aes(
+    label = names,
+    size = values,
+    color = values
+  )) +
+    geom_text_wordcloud() +
+    scale_size_area(max_size = 30) +
+    theme_minimal() +
+    scale_color_viridis_c()
+})
+```
+
+## ggplot2
+
+```{r, echo = F, fig.height=5, fig.width=7, out.width='60%', fig.align='center', cache=TRUE}
+
+local({
+  students <-
+    c(
+      "Huyen",
+      "Giorgia",
+      "Edward",
+      "Natlia",
+      "Xen",
+      "Janice",
+      "Emily",
+      "Irina",
+      "Deepika"
+    )
+
+  set.seed(5)
+
+  data <- map_df(1:100, ~ {
+    tibble(
+      names = students,
+      values = sample(1:100, length(students), replace = F),
+      rep = .x
+    )
+  })
+
+  plot <- ggplot(data, aes(
+    label = names,
+    size = values,
+    color = values
+  )) +
+    geom_text_wordcloud() +
+    scale_size_area(max_size = 28) +
+    theme_minimal() +
+    scale_color_viridis_c() +
+    transition_time(rep) +
+    ease_aes("linear")
+
+  animate(plot, fps = 3, device = "ragg_png", renderer = gifski_renderer())
+})
+```
+
+## ggplot2
+
+```{r, echo = F, fig.height=5, fig.width=10, out.width='100%', fig.align='center'}
+local({
+  df <- tibble(
+    date = seq(mdy("9/1/1987"), floor_date(Sys.Date(), "month"), "month")
+  ) %>%
+    mutate(
+      month = month(date),
+      year = year(date)
+    )
+
+  df <- tibble(date = seq(mdy("9/1/1987"), Sys.Date(), "1 month")) %>%
+    mutate(
+      month = month(date),
+      year = year(date)
+    )
+
+
+  plot_data <- df %>%
+    mutate(
+      era = case_when(
+        date %in% mdy("9/1/1987"):mdy("9/1/1991") ~ "Childhood",
+        date %in% mdy("10/1/1991"):mdy("6/1/2005") ~ "K-12 Grade School",
+        date %in% mdy("7/1/2005"):mdy("12/1/2009") ~ "BSc in Biological Sciences",
+        date %in% mdy("1/1/2010"):mdy("7/1/2013") ~ "Pre Graduate Work",
+        date %in% mdy("8/1/2013"):mdy("6/1/2015") ~ "MPH in Biostatistics & Epidemiology",
+        date %in% mdy("7/1/2015"):mdy("8/1/2016") ~ "Data Analyst",
+        date %in% mdy("9/1/2016"):Sys.Date() ~ "Biostatistician"
+      )
+    ) %>%
+    mutate(era = factor(
+      era,
+      levels = c(
+        "Childhood",
+        "K-12 Grade School",
+        "BSc in Biological Sciences",
+        "Pre Graduate Work",
+        "MPH in Biostatistics & Epidemiology",
+        "Data Analyst",
+        "Biostatistician"
+      )
+    ))
+
+  base_plot <- ggplot(plot_data, aes(y = month, x = year)) +
+    geom_tile(color = "white", aes(fill = era), size = 1) +
+    scale_y_continuous(breaks = -6:18, limits = c(-6, 18)) +
+    scale_x_continuous(breaks = 1980:2020) +
+    labs(y = "Month", x = "Year") +
+    theme_light() +
+    theme(legend.position = "bottom") +
+    scale_fill_d3()
+
+
+  ## annotate the definition of 1 square = 1 month
+  plot <- base_plot +
+    geom_curve(
+      x = 1987,
+      y = 12,
+      xend = 1986,
+      yend = 14,
+      curvature = -.4,
+      arrow = arrow(length = unit(0.01, "npc"), ends = "first"),
+      color = "black"
+    ) +
+    annotate(
+      "text",
+      x = 1985,
+      y = 15,
+      hjust = 0,
+      label = "1 square = 1 month",
+      family = "Segoe Script"
+    )
+
+  ## annotate eras with labels
+
+  ### set colors
+  pallete_colors <- pal_d3("category10")(10)
+
+  ## set size
+  annotation_size <- 5
+
+  plot <- plot +
+    annotate(
+      "text",
+      x = 1989,
+      y = -1,
+      label = "Childhood",
+      color = pallete_colors[[1]],
+      size = annotation_size,
+      family = "Segoe Script"
+    ) +
+    annotate(
+      "text",
+      x = 1998,
+      y = -1,
+      label = "K-12 Grade School",
+      color = pallete_colors[[2]],
+      size = annotation_size,
+      family = "Segoe Script"
+    ) +
+    annotate(
+      "text",
+      x = 2007.5,
+      y = -1,
+      label = "BSc in Biological Sciences",
+      color = pallete_colors[[3]],
+      size = annotation_size,
+      family = "Segoe Script"
+    ) +
+    annotate(
+      "text",
+      x = 2011,
+      y = 14,
+      label = "Pre Graduate Employment",
+      color = pallete_colors[[4]],
+      size = annotation_size,
+      family = "Segoe Script"
+    ) +
+    annotate(
+      "text",
+      x = 2013,
+      y = -3,
+      label = "MPH in Biostatistics & Epidemiology",
+      color = pallete_colors[[5]],
+      size = annotation_size,
+      family = "Segoe Script"
+    ) +
+    annotate(
+      "text",
+      x = 2012.5,
+      y = 16,
+      label = "Data Analyst",
+      color = pallete_colors[[6]],
+      size = annotation_size,
+      family = "Segoe Script"
+    ) +
+    annotate(
+      "text",
+      x = 2018.5,
+      y = -1,
+      label = "Biostatistician",
+      color = pallete_colors[[7]],
+      size = annotation_size,
+      family = "Segoe Script"
+    )
+
+
+  ## add additional curve segments for labels
+
+  plot <- plot +
+    geom_curve(
+      x = 1989,
+      y = 1,
+      xend = 1989,
+      yend = -.5,
+      curvature = .2,
+      arrow = arrow(length = unit(0.01, "npc"), ends = "first"),
+      color = "black"
+    ) +
+    geom_curve(
+      x = 1998,
+      y = 1,
+      xend = 1998,
+      yend = -.5,
+      curvature = .2,
+      arrow = arrow(length = unit(0.01, "npc"), ends = "first"),
+      color = "black"
+    ) +
+    geom_curve(
+      x = 2007,
+      y = 1,
+      xend = 2007,
+      yend = -.5,
+      curvature = -.2,
+      arrow = arrow(length = unit(0.01, "npc"), ends = "first"),
+      color = "black"
+    ) +
+    geom_curve(
+      x = 2011,
+      y = 12,
+      xend = 2011,
+      yend = 13.5,
+      curvature = -.2,
+      arrow = arrow(length = unit(0.01, "npc"), ends = "first"),
+      color = "black"
+    ) +
+    geom_curve(
+      x = 2015,
+      y = 12,
+      xend = 2015,
+      yend = 16,
+      arrow = arrow(length = unit(0.01, "npc"), ends = "first"),
+      color = "black",
+      curvature = .8
+    ) +
+    geom_curve(
+      x = 2014,
+      y = 1,
+      xend = 2014,
+      yend = -2.5,
+      arrow = arrow(length = unit(0.01, "npc"), ends = "first"),
+      curvature = -0.2,
+      color = "black"
+    ) +
+    geom_curve(
+      x = 2018,
+      y = 1,
+      xend = 2018,
+      yend = -0.5,
+      arrow = arrow(length = unit(0.01, "npc"), ends = "first"),
+      curvature = -0.2,
+      color = "black"
+    )
+
+  ## let's add a label for 1 column equals 1 year of age
+
+  plot <- plot +
+    annotate(
+      "text",
+      x = 1985,
+      y = 6,
+      label = "1 year",
+      angle = 90,
+      size = 7,
+      color = "black",
+      family = "Segoe Script"
+    ) +
+    annotate(
+      "text",
+      x = 1988,
+      y = 13,
+      label = "age",
+      size = 5,
+      color = "black",
+      family = "Segoe Script"
+    ) +
+    geom_segment(
+      x = 1988.75,
+      y = 13,
+      xend = 1993,
+      yend = 13,
+      arrow = arrow(ends = "last", length = unit(.01, units = "npc")),
+      color = "black"
+    ) +
+    geom_segment(
+      x = 1985,
+      xend = 1985,
+      y = 8,
+      yend = 12,
+      color = "black"
+    ) +
+    geom_segment(
+      x = 1985,
+      xend = 1985,
+      y = 1,
+      yend = 4,
+      color = "black"
+    ) +
+    geom_segment(
+      x = 1984.5,
+      xend = 1985.5,
+      y = 12,
+      yend = 12,
+      color = "black"
+    ) +
+    geom_segment(
+      x = 1984.5,
+      xend = 1985.5,
+      y = 1,
+      yend = 1,
+      color = "black"
+    )
+
+  ## lets add a title
+  plot <- plot +
+    annotate(
+      "text",
+      x = 1987,
+      y = -5,
+      label = "Michael Luu, MPH",
+      size = 15,
+      hjust = 0,
+      fontface = "bold"
+    )
+
+  plot <- plot +
+    theme_void() +
+    theme(
+      legend.position = "none"
+    )
+
+  plot
+})
+```
+
+## ggplot2
+
+```{r, echo = F, fig.height=5, fig.width=7, out.width='70%', fig.align='center'}
+
+local({
+  data <- lung %>% as_tibble()
+
+  fit <- survfit(Surv(time, status) ~ sex, data = data)
+
+  ggsurvplot(
+    fit = fit,
+    data = data,
+    palette = "Set2",
+    risk.table = T,
+    ggtheme = survminer::theme_survminer(
+      base_size = 15,
+      font.x = c(15, "bold", "black"),
+      font.y = c(15, "bold", "black"),
+    ),
+    tables.theme = theme_void(base_size = 15),
+    legend = "none",
+    legend.labs = c("Male", "Female"),
+    surv.scale = "percent",
+    xlab = "Time (Days)",
+    ylab = "Overall Survival (%)",
+    title = "Overall Survival between Male and Female"
+  )
+})
+```
+
+## ggplot2
+
+```{r, echo = F, fig.height=5, fig.width=10, out.width='100%', fig.align='center'}
+local({
+  url <- "https://raw.githubusercontent.com/datadesk/california-coronavirus-data/master/cdph-county-cases-deaths.csv"
+
+  data <- read_csv(url)
+
+  data <- data %>% filter(str_detect(county, "Los Angeles"))
+
+  data <- data %>%
+    mutate(
+      new_cases = lag(confirmed_cases) - confirmed_cases,
+      incidence = (new_cases / population) * 100000,
+      incidence_7days = zoo::rollmean(incidence, k = 7, fill = NA)
+    ) %>%
+    slice(7:nrow(.))
+
+  plot_subtitle <-
+    glue::glue('Data from {format(min(data$date), "%b-%Y")} to {format(max(data$date), "%b-%Y")} - 7-day moving average')
+
+  ggplot(data, aes(x = date, y = incidence_7days)) +
+    geom_line(size = 1) +
+    scale_x_date(date_breaks = "3 months", date_labels = "%b-%Y") +
+    theme_light(base_size = 15) +
+    theme(
+      axis.title = element_text(face = "bold"),
+      plot.title = element_text(face = "bold"),
+      panel.grid.minor = element_blank()
+    ) +
+    labs(
+      x = "Date", y = "New Cases / 100,0000", title = "COVID-19 Incidence in Los Angeles County",
+      subtitle = plot_subtitle
+    )
+})
+```
+
+## ggplot2
+
+```{r, echo = F, fig.height=5, fig.width=10, out.width='100%', fig.align='center'}
+set.seed(as.numeric(Sys.Date()))
+canvas_collatz(colors = colorPalette("tuscany3"))
+```
+
+## ggplot2
+
+```{r, echo = F, fig.height=5, fig.width=10, out.width='100%', fig.align='center'}
+set.seed(as.numeric(Sys.Date()))
+canvas_function(colors = colorPalette("tuscany1"))
+```
+
+<!-- ## ggplot2 -->
+
+<!-- ```{r, echo = F} -->
+<!-- out <- local({ -->
+<!--   df <- read_csv(here::here("data/emergency.csv")) -->
+
+<!--   df <- df %>% -->
+<!--     mutate( -->
+<!--       gender = factor(gender, levels = 0:1, labels = c("Male", "Female")), -->
+<!--       death = factor(death, levels = 0:1, labels = c("Alive", "Died")) -->
+<!--     ) -->
+
+<!--   dotplot <- ggplot(df, aes(x = death, y = age, fill = death)) + -->
+<!--     geom_dotplot(binwidth = 1, binaxis = "y", stackdir = "center") + -->
+<!--     labs(x = "Death", y = "Age") + -->
+<!--     theme_light(base_size = 15) + -->
+<!--     theme( -->
+<!--       legend.position = "none", -->
+<!--       axis.title = element_text(face = "bold") -->
+<!--     ) + -->
+<!--     ggsci::scale_fill_d3() -->
+
+<!--   histogram <- ggplot(df, aes(x = age)) + -->
+<!--     geom_histogram(binwidth = 1) + -->
+<!--     labs(x = "Age", y = "Count (n)") + -->
+<!--     theme_light(base_size = 15) + -->
+<!--     theme( -->
+<!--       legend.position = "none", -->
+<!--       axis.title = element_text(face = "bold") -->
+<!--     ) + -->
+<!--     ggsci::scale_fill_d3() -->
+
+<!--   boxplot <- ggplot(df, aes(x = gender, y = hr, color = gender)) + -->
+<!--     geom_boxplot(width = .25) + -->
+<!--     labs(x = "Gender", y = "Heart Rate") + -->
+<!--     theme_light(base_size = 15) + -->
+<!--     theme( -->
+<!--       legend.position = "none", -->
+<!--       axis.title = element_text(face = "bold") -->
+<!--     ) + -->
+<!--     ggsci::scale_color_d3() -->
+
+<!--   barplot <- ggplot(df, aes(x = gender, fill = gender)) + -->
+<!--     geom_bar(width = .5) + -->
+<!--     labs(x = "Gender", y = "Count (n)") + -->
+<!--     theme_light(base_size = 15) + -->
+<!--     theme( -->
+<!--       legend.position = "none", -->
+<!--       axis.title = element_text(face = "bold"), -->
+<!--       panel.grid.major.x = element_blank() -->
+<!--     ) + -->
+<!--     ggsci::scale_fill_d3() -->
+
+<!--   tibble::lst(dotplot, histogram, boxplot, barplot) -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- # Dotplot -->
+
+<!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
+<!-- out$dotplot -->
+<!-- ``` -->
+
+<!-- --- -->
+<!-- # Histogram -->
+
+<!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
+<!-- out$histogram -->
+<!-- ``` -->
+
+<!-- --- -->
+<!-- # Boxplot -->
+
+<!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
+<!-- out$boxplot -->
+<!-- ``` -->
+
+<!-- --- -->
+<!-- # Barplot -->
+
+<!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
+<!-- out$barplot -->
+<!-- ``` -->
+
+## Objective {.smaller}
+
+* We won't be able to cover how to create all the various types of plots
+
+* The goal is to provide you with the understanding of the basic components and tools on **HOW** these plots are created using ggplot2
+
+* Plots we will go over:
+  + Dotplots
+  + Histograms
+  + Boxplots
+  + Barplots
+
+*  **All plots in ggplot2 are built upon the same fundamental principals and concepts**
+
+## Components of a Plot
+
+We will be using the `emergency` dataset as an example
+
+```{r, echo = F}
+
+df <- local({
+  df <- read_csv(here::here("data/emergency.csv"), show_col_types = F)
+
+  df <- df %>%
+    mutate(
+      gender = factor(gender, 0:1, labels = c('Male', 'Female'))
+    )
+})
+
+df %>% print(width = 80, n = 10)
+```
+
+## Components of a Plot
+
+```{r, out.width='90%', fig.width=10, fig.height=5, echo = F, fig.retina=2}
+
+ggplot(df, aes(x = gender, y = age, fill = gender)) +
+  geom_dotplot(binaxis = 'y', binwidth = 1, stackdir = 'center') +
+  theme_light(base_size = 15) +
+  labs(x = NULL, y = 'Age') +
+  theme(legend.position = 'none',
+        axis.title = element_text(face = 'bold'))
+
+```
+
+## Components of a Plot
+
+* The data for the plot comes from the **emergency** dataset
+
+* The plot contains a x and y coordinate system
+  + A categorical X describing **gender** (Male, Female)
+  + A numeric Y describing the **age**
+
+* The plot contains a color
+  + The color differs by **gender**
+
+* The plot is being depicted using a **dotplot** (geometries)
+
+
+## The Grammar of Graphics  {.smaller}
+
+::: columns
+
+::: {.column width='50%'}
+* The grammar of graphics was originally proposed by Leland Wilkinson
+
+* A variation of this framework was further proposed by Hadley Wickham which is used in ggplot2
+
+* This framework is a tool that allows us to concisely describe the components of a plot or graphic
+:::
+
+::: {.column width='50%'}
+```{r, echo = F, out.width='50%', fig.align='center'}
+knitr::include_graphics('figures/screenshots/grammar_of_graphics_book.jpg')
+```
+:::
+
+:::
+
+# The Grammar of Graphics
+
+## The Grammar of Graphics
+
+```{r, out.width='90%', echo = F}
+knitr::include_graphics("figures/ggplot_grammar_layers.PNG")
+```
+
+## The Grammar of Graphics
+
+* We first define the data and mappping component of our plot to establish the base layer of the plot
+
+  + Recall the data is coming from the **emergency** dataset
+
+  + The X component is the caterogical (factor) **gender** column
+
+  + The Y component is the numeric **age** column
+
+  + The fill component is the **gender** column
+
+<!-- ```{r, echo = T, eval = T, out.width='50%', fig.width=7, fig.height=5} -->
+<!-- ggplot(data = df, mapping = aes(x = gender, y = age, fill = gender)) #<< -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r, echo = T, eval = T, out.width='50%', fig.width=7, fig.height=5} -->
+<!-- ggplot(df, aes(x = gender, y = age, fill = gender)) + -->
+<!--   geom_dotplot(binaxis = 'y', binwidth = 1, stackdir = 'center')  #<< -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r, echo = T, eval = T, out.width='50%', fig.width=7, fig.height=5} -->
+<!-- ggplot(df, aes(x = gender, y = age, fill = gender)) +  -->
+<!--   geom_dotplot(binaxis = 'y', binwidth = 1, stackdir = 'center') +  -->
+<!--   labs(x = NULL, y = 'Age') #<< -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ```{r, echo = T, eval = T, out.width='50%', fig.width=7, fig.height=5} -->
+<!-- ggplot(df, aes(x = gender, y = age, fill = gender)) +  -->
+<!--   geom_dotplot(binaxis = 'y', binwidth = 1, stackdir = 'center') +  -->
+<!--   labs(x = NULL, y = 'Age') +  -->
+<!--   theme_light(base_size = 15) +  #<< -->
+<!--   theme(legend.position = 'none', #<< -->
+<!--         axis.title = element_text(face = 'bold')) #<< -->
+<!-- ``` -->
+
+<!-- --- -->
+
+# Resources
+
+## Website
+
+```{r, out.width = '70%', echo = F, fig.align='center'}
+knitr::include_graphics("figures/ggplot_website.PNG")
+```
+
+::: aside
+-   https://ggplot2.tidyverse.org/
+:::
+
+## Cheatsheet
+
+```{r, out.width='45%', echo = F, fig.align='center'}
+knitr::include_graphics("figures/ggplot2_cheatsheet.PNG")
+```
+
+::: aside
+-   https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf
+:::
+
+## Book
+
+```{r, out.width='25%', echo = F, fig.align='center'}
+knitr::include_graphics("figures/ggplot2_book.PNG")
+```
+
+::: aside
+-   https://ggplot2-book.org/index.html
+:::
