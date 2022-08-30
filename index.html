@@ -388,9 +388,9 @@
 <section>
 <section id="descriptive-statistics-in-r" class="title-slide slide level1 center">
 <h1><span class="r-fit-text">Descriptive Statistics in R</span></h1>
-<p><span class="red">Introduction to plotting in the tidyverse: ggplot2</span></p>
-<p>Michael Luu, MPH | Marcio Diniz, PhD</p>
-<p>August 30, 2022</p>
+<p><span class="teal">Introduction to plotting in the tidyverse: ggplot2</span></p>
+<p><span class="small">Michael Luu, MPH | Marcio Diniz, PhD</span><br>
+<span class="small">August 30, 2022</span></p>
 </section>
 <section id="section" class="slide level2">
 <h2></h2>
@@ -428,90 +428,38 @@
 <section id="ggplot2-7" class="slide level2">
 <h2>ggplot2</h2>
 
-<!-- ## ggplot2 -->
-<!-- ```{r, echo = F} -->
-<!-- out <- local({ -->
-<!--   df <- read_csv(here::here("data/emergency.csv")) -->
-<!--   df <- df %>% -->
-<!--     mutate( -->
-<!--       gender = factor(gender, levels = 0:1, labels = c("Male", "Female")), -->
-<!--       death = factor(death, levels = 0:1, labels = c("Alive", "Died")) -->
-<!--     ) -->
-<!--   dotplot <- ggplot(df, aes(x = death, y = age, fill = death)) + -->
-<!--     geom_dotplot(binwidth = 1, binaxis = "y", stackdir = "center") + -->
-<!--     labs(x = "Death", y = "Age") + -->
-<!--     theme_light(base_size = 15) + -->
-<!--     theme( -->
-<!--       legend.position = "none", -->
-<!--       axis.title = element_text(face = "bold") -->
-<!--     ) + -->
-<!--     ggsci::scale_fill_d3() -->
-<!--   histogram <- ggplot(df, aes(x = age)) + -->
-<!--     geom_histogram(binwidth = 1) + -->
-<!--     labs(x = "Age", y = "Count (n)") + -->
-<!--     theme_light(base_size = 15) + -->
-<!--     theme( -->
-<!--       legend.position = "none", -->
-<!--       axis.title = element_text(face = "bold") -->
-<!--     ) + -->
-<!--     ggsci::scale_fill_d3() -->
-<!--   boxplot <- ggplot(df, aes(x = gender, y = hr, color = gender)) + -->
-<!--     geom_boxplot(width = .25) + -->
-<!--     labs(x = "Gender", y = "Heart Rate") + -->
-<!--     theme_light(base_size = 15) + -->
-<!--     theme( -->
-<!--       legend.position = "none", -->
-<!--       axis.title = element_text(face = "bold") -->
-<!--     ) + -->
-<!--     ggsci::scale_color_d3() -->
-<!--   barplot <- ggplot(df, aes(x = gender, fill = gender)) + -->
-<!--     geom_bar(width = .5) + -->
-<!--     labs(x = "Gender", y = "Count (n)") + -->
-<!--     theme_light(base_size = 15) + -->
-<!--     theme( -->
-<!--       legend.position = "none", -->
-<!--       axis.title = element_text(face = "bold"), -->
-<!--       panel.grid.major.x = element_blank() -->
-<!--     ) + -->
-<!--     ggsci::scale_fill_d3() -->
-<!--   tibble::lst(dotplot, histogram, boxplot, barplot) -->
-<!-- }) -->
-<!-- ``` -->
-<!-- # Dotplot -->
-<!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
-<!-- out$dotplot -->
-<!-- ``` -->
-<!-- --- -->
-<!-- # Histogram -->
-<!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
-<!-- out$histogram -->
-<!-- ``` -->
-<!-- --- -->
-<!-- # Boxplot -->
-<!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
-<!-- out$boxplot -->
-<!-- ``` -->
-<!-- --- -->
-<!-- # Barplot -->
-<!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
-<!-- out$barplot -->
-<!-- ``` -->
 <img data-src="index_files/figure-revealjs/unnamed-chunk-9-1.png" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
-<section id="objective" class="slide level2 smaller">
+<section id="objective" class="slide level2">
 <h2>Objective</h2>
 <ul>
 <li><p>We won’t be able to cover how to create all the various types of plots</p></li>
-<li><p>The goal is to provide you with the understanding of the basic components and tools on <strong>HOW</strong> these plots are created using ggplot2</p></li>
-<li><p>Plots we will go over:</p>
-<ul>
-<li>Dotplots</li>
-<li>Histograms</li>
-<li>Boxplots</li>
-<li>Barplots</li>
-</ul></li>
-<li><p><strong>All plots in ggplot2 are built upon the same fundamental principals and concepts</strong></p></li>
+<li><p>The goal is to provide you with the understanding of the basic components and tools on <span class="bold-highlight">HOW</span> these plots are created using ggplot2</p></li>
+<li><p><span class="bold-highlight">All plots in ggplot2 are built upon the same fundamental principals and concepts</span></p></li>
 </ul>
+</section></section>
+<section>
+<section id="plots-we-will-go-over" class="title-slide slide level1 center">
+<h1>Plots we <span class="teal">WILL</span> go over</h1>
+<div class="cell">
+
+</div>
 </section>
+<section id="dotplot" class="slide level2">
+<h2>Dotplot</h2>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-11-1.png" style="width:90.0%" class="r-stretch"></section>
+<section id="histogram" class="slide level2">
+<h2>Histogram</h2>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-12-1.png" style="width:90.0%" class="r-stretch"></section>
+<section id="boxplot" class="slide level2">
+<h2>Boxplot</h2>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-13-1.png" style="width:90.0%" class="r-stretch"></section>
+<section id="barplot" class="slide level2">
+<h2>Barplot</h2>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:90.0%" class="r-stretch"></section>
 <section id="components-of-a-plot" class="slide level2">
 <h2>Components of a Plot</h2>
 <p>We will be using the <code>emergency</code> dataset as an example</p>
@@ -541,34 +489,41 @@
 <section id="components-of-a-plot-1" class="slide level2">
 <h2>Components of a Plot</h2>
 
-<img data-src="index_files/figure-revealjs/unnamed-chunk-11-1.png" style="width:100.0%" class="r-stretch"></section>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-16-1.png" style="width:100.0%" class="r-stretch"></section>
 <section id="components-of-a-plot-2" class="slide level2">
 <h2>Components of a Plot</h2>
 <div>
 <ul>
-<li class="fragment"><p>The data for the plot comes from the <strong>emergency</strong> dataset</p></li>
+<li class="fragment"><p>The data for the plot comes from the <span class="bold-highlight">emergency</span> dataset</p></li>
 <li class="fragment"><p>The plot contains a x and y coordinate system</p>
 <ul>
-<li class="fragment">A categorical X describing <strong>gender</strong> (Male, Female)</li>
-<li class="fragment">A numeric Y describing the <strong>age</strong></li>
+<li class="fragment">A categorical X describing <span class="bold-highlight">gender</span> (Male, Female)</li>
+<li class="fragment">A numeric Y describing the <span class="bold-highlight">age</span></li>
 </ul></li>
 <li class="fragment"><p>The plot contains a color</p>
 <ul>
-<li class="fragment">The color differs by <strong>gender</strong></li>
+<li class="fragment">The color differs by <span class="bold-highlight">gender</span></li>
 </ul></li>
-<li class="fragment"><p>The plot is being depicted using a <strong>dotplot</strong> (geometries)</p></li>
+<li class="fragment"><p>The plot is being depicted using a <span class="bold-highlight">dotplot</span> (geometries)</p></li>
 </ul>
 </div>
+</section></section>
+<section>
+<section id="the-grammar-of-graphics" class="title-slide slide level1 center">
+<h1>The Grammar of Graphics</h1>
+
 </section>
-<section id="the-grammar-of-graphics" class="slide level2 smaller">
+<section id="the-grammar-of-graphics-1" class="slide level2 smaller">
 <h2>The Grammar of Graphics</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
+<div>
 <ul>
-<li><p>The grammar of graphics was originally proposed by Leland Wilkinson</p></li>
-<li><p>A variation of this framework was further proposed by Hadley Wickham which is used in ggplot2</p></li>
-<li><p>This framework is a tool that allows us to concisely describe the components of a plot or graphic</p></li>
+<li class="fragment"><p>The grammar of graphics was originally proposed by Leland Wilkinson</p></li>
+<li class="fragment"><p>A variation of this framework was further proposed by Hadley Wickham which is used in ggplot2</p></li>
+<li class="fragment"><p>This framework is a tool that allows us to concisely describe the components of a plot or graphic</p></li>
 </ul>
+</div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -581,11 +536,6 @@
 </div>
 </div>
 </div>
-</section></section>
-<section>
-<section id="the-grammar-of-graphics-1" class="title-slide slide level1 center">
-<h1>The Grammar of Graphics</h1>
-
 </section>
 <section id="the-grammar-of-graphics-2" class="slide level2">
 <h2>The Grammar of Graphics</h2>
@@ -599,7 +549,7 @@
 <span id="cb2-2"><a href="#cb2-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gender, <span class="at">y =</span> age, <span class="at">fill =</span> gender))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column">
 <div class="cell-output-display">
-<p><img data-src="index_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:100.0%"></p>
+<p><img data-src="index_files/figure-revealjs/unnamed-chunk-19-1.png" style="width:100.0%"></p>
 </div>
 </div>
 </div>
@@ -633,7 +583,7 @@
 <span id="cb3-5"><a href="#cb3-5"></a>               <span class="at">stackdir =</span> <span class="st">'center'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column">
 <div class="cell-output-display">
-<p><img data-src="index_files/figure-revealjs/unnamed-chunk-15-1.png" style="width:100.0%"></p>
+<p><img data-src="index_files/figure-revealjs/unnamed-chunk-20-1.png" style="width:100.0%"></p>
 </div>
 </div>
 </div>
@@ -651,7 +601,7 @@
 <span id="cb4-7"><a href="#cb4-7"></a>       <span class="at">y =</span> <span class="st">'Age'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column">
 <div class="cell-output-display">
-<p><img data-src="index_files/figure-revealjs/unnamed-chunk-16-1.png" style="width:100.0%"></p>
+<p><img data-src="index_files/figure-revealjs/unnamed-chunk-21-1.png" style="width:100.0%"></p>
 </div>
 </div>
 </div>
@@ -672,7 +622,7 @@
 <span id="cb5-10"><a href="#cb5-10"></a>        <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">'bold'</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column">
 <div class="cell-output-display">
-<p><img data-src="index_files/figure-revealjs/unnamed-chunk-17-1.png" style="width:100.0%"></p>
+<p><img data-src="index_files/figure-revealjs/unnamed-chunk-22-1.png" style="width:100.0%"></p>
 </div>
 </div>
 </div>
@@ -688,7 +638,7 @@
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="figures/ggplot_website.PNG" style="width:70.0%"></p>
+<p><img data-src="figures/ggplot_website.PNG" style="width:75.0%"></p>
 </figure>
 </div>
 </div>
@@ -705,7 +655,7 @@
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="figures/ggplot2_cheatsheet.PNG" style="width:45.0%"></p>
+<p><img data-src="figures/ggplot2_cheatsheet.PNG" style="width:60.0%"></p>
 </figure>
 </div>
 </div>

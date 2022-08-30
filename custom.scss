@@ -1,27 +1,26 @@
 /*-- scss:defaults --*/
 $theme-white: #FFFFFF;
 $theme-dark-blue: #011627;
-$theme-teal: #2EC4B6;
+$theme-teal: #32936f;
 $theme-red: #860E1C;
 $theme-orange: #FF9F1C;
+$theme-black: #000000;
 
 $body-bg: $theme-white;
 $body-color: $theme-dark-blue;
 $link-color: $theme-dark-blue;
-$presentation-heading-color: lighten($theme-dark-blue, 15%);
-$text-muted: $theme-red;
-$presentation-title-slide-text-align: left;
-$code-color: $theme-red;
+
+$text-muted: $theme-dark-blue;
+$code-color: $theme-teal;
 $code-block-font-size: 0.45em;
+
+$presentation-heading-color: lighten($theme-dark-blue, 15%);
+$presentation-title-slide-text-align: left;
 
 /*-- scss:rules --*/
 
 .reveal .slide a {
   text-decoration: underline;
-}
-
-.reveal .title-inverse {
-  background-color: $theme-dark-blue;
 }
 
 .orange {
@@ -32,7 +31,20 @@ $code-block-font-size: 0.45em;
   color: $theme-red;
 }
 
+.teal {
+  color: $theme-teal;
+}
+
 .reveal .slide p.author {
   font-size: 10em;
   
+}
+
+.small {
+  font-size: .7em;
+}
+
+.bold-highlight {
+  font-weight: bold;
+  color: $theme-teal;
 }
