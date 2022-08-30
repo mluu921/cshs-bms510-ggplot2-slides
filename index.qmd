@@ -35,11 +35,10 @@ library(aRtsy)
 
 # [Descriptive Statistics in R]{.r-fit-text}
 
-[Introduction to plotting in the tidyverse: ggplot2]{.red}
+[Introduction to plotting in the tidyverse: ggplot2]{.teal}
 
-Michael Luu, MPH \| Marcio Diniz, PhD
-
-`r format(Sys.Date(), '%B %d, %Y')`
+| [Michael Luu, MPH \| Marcio Diniz, PhD]{.small}
+| [`r format(Sys.Date(), '%B %d, %Y')`]{.small}
 
 ## 
 
@@ -498,156 +497,143 @@ set.seed(as.numeric(Sys.Date()))
 canvas_function(colors = colorPalette("tuscany1"))
 ```
 
-<!-- ## ggplot2 -->
-
-<!-- ```{r, echo = F} -->
-
-<!-- out <- local({ -->
-
-<!--   df <- read_csv(here::here("data/emergency.csv")) -->
-
-<!--   df <- df %>% -->
-
-<!--     mutate( -->
-
-<!--       gender = factor(gender, levels = 0:1, labels = c("Male", "Female")), -->
-
-<!--       death = factor(death, levels = 0:1, labels = c("Alive", "Died")) -->
-
-<!--     ) -->
-
-<!--   dotplot <- ggplot(df, aes(x = death, y = age, fill = death)) + -->
-
-<!--     geom_dotplot(binwidth = 1, binaxis = "y", stackdir = "center") + -->
-
-<!--     labs(x = "Death", y = "Age") + -->
-
-<!--     theme_light(base_size = 15) + -->
-
-<!--     theme( -->
-
-<!--       legend.position = "none", -->
-
-<!--       axis.title = element_text(face = "bold") -->
-
-<!--     ) + -->
-
-<!--     ggsci::scale_fill_d3() -->
-
-<!--   histogram <- ggplot(df, aes(x = age)) + -->
-
-<!--     geom_histogram(binwidth = 1) + -->
-
-<!--     labs(x = "Age", y = "Count (n)") + -->
-
-<!--     theme_light(base_size = 15) + -->
-
-<!--     theme( -->
-
-<!--       legend.position = "none", -->
-
-<!--       axis.title = element_text(face = "bold") -->
-
-<!--     ) + -->
-
-<!--     ggsci::scale_fill_d3() -->
-
-<!--   boxplot <- ggplot(df, aes(x = gender, y = hr, color = gender)) + -->
-
-<!--     geom_boxplot(width = .25) + -->
-
-<!--     labs(x = "Gender", y = "Heart Rate") + -->
-
-<!--     theme_light(base_size = 15) + -->
-
-<!--     theme( -->
-
-<!--       legend.position = "none", -->
-
-<!--       axis.title = element_text(face = "bold") -->
-
-<!--     ) + -->
-
-<!--     ggsci::scale_color_d3() -->
-
-<!--   barplot <- ggplot(df, aes(x = gender, fill = gender)) + -->
-
-<!--     geom_bar(width = .5) + -->
-
-<!--     labs(x = "Gender", y = "Count (n)") + -->
-
-<!--     theme_light(base_size = 15) + -->
-
-<!--     theme( -->
-
-<!--       legend.position = "none", -->
-
-<!--       axis.title = element_text(face = "bold"), -->
-
-<!--       panel.grid.major.x = element_blank() -->
-
-<!--     ) + -->
-
-<!--     ggsci::scale_fill_d3() -->
-
-<!--   tibble::lst(dotplot, histogram, boxplot, barplot) -->
-
-<!-- }) -->
-
-<!-- ``` -->
-
-<!-- # Dotplot -->
-
-<!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
-
-<!-- out$dotplot -->
-
-<!-- ``` -->
-
-<!-- --- -->
-
-<!-- # Histogram -->
-
-<!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
-
-<!-- out$histogram -->
-
-<!-- ``` -->
-
-<!-- --- -->
-
-<!-- # Boxplot -->
-
-<!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
-
-<!-- out$boxplot -->
-
-<!-- ``` -->
-
-<!-- --- -->
-
-<!-- # Barplot -->
-
-<!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
-
-<!-- out$barplot -->
-
-<!-- ``` -->
-
-## Objective {.smaller}
+## Objective
 
 -   We won't be able to cover how to create all the various types of plots
 
--   The goal is to provide you with the understanding of the basic components and tools on **HOW** these plots are created using ggplot2
+-   The goal is to provide you with the understanding of the basic components and tools on [HOW]{.bold-highlight} these plots are created using ggplot2
 
--   Plots we will go over:
+-   [All plots in ggplot2 are built upon the same fundamental principals and concepts]{.bold-highlight}
 
-    -   Dotplots
-    -   Histograms
-    -   Boxplots
-    -   Barplots
+# Plots we [WILL]{.teal} go over
 
--   **All plots in ggplot2 are built upon the same fundamental principals and concepts**
+```{r, echo = F}
+
+out <- local({
+
+  df <- read_csv(here::here("data/emergency.csv"))
+
+  df <- df %>%
+
+    mutate(
+
+      gender = factor(gender, levels = 0:1, labels = c("Male", "Female")),
+
+      death = factor(death, levels = 0:1, labels = c("Alive", "Died"))
+
+    )
+
+  dotplot <- ggplot(df, aes(x = death, y = age, fill = death)) +
+
+    geom_dotplot(binwidth = 1, binaxis = "y", stackdir = "center") +
+
+    labs(x = "Death", y = "Age") +
+
+    theme_light(base_size = 15) +
+
+    theme(
+
+      legend.position = "none",
+
+      axis.title = element_text(face = "bold")
+
+    ) +
+
+    ggsci::scale_fill_d3()
+
+  histogram <- ggplot(df, aes(x = age)) +
+
+    geom_histogram(binwidth = 1) +
+
+    labs(x = "Age", y = "Count (n)") +
+
+    theme_light(base_size = 15) +
+
+    theme(
+
+      legend.position = "none",
+
+      axis.title = element_text(face = "bold")
+
+    ) +
+
+    ggsci::scale_fill_d3()
+
+  boxplot <- ggplot(df, aes(x = gender, y = hr, color = gender)) +
+
+    geom_boxplot(width = .25) +
+
+    labs(x = "Gender", y = "Heart Rate") +
+
+    theme_light(base_size = 15) +
+
+    theme(
+
+      legend.position = "none",
+
+      axis.title = element_text(face = "bold")
+
+    ) +
+
+    ggsci::scale_color_d3()
+
+  barplot <- ggplot(df, aes(x = gender, fill = gender)) +
+
+    geom_bar(width = .5) +
+
+    labs(x = "Gender", y = "Count (n)") +
+
+    theme_light(base_size = 15) +
+
+    theme(
+
+      legend.position = "none",
+
+      axis.title = element_text(face = "bold"),
+
+      panel.grid.major.x = element_blank()
+
+    ) +
+
+    ggsci::scale_fill_d3()
+
+  tibble::lst(dotplot, histogram, boxplot, barplot)
+
+})
+
+```
+
+## Dotplot
+
+```{r, echo = F, out.width='90%'}
+
+out$dotplot
+
+```
+
+## Histogram
+
+```{r, echo = F, out.width='90%'}
+
+out$histogram
+
+```
+
+## Boxplot
+
+```{r, echo = F, out.width='90%'}
+
+out$boxplot
+
+```
+
+## Barplot
+
+```{r, echo = F, out.width='90%'}
+
+out$barplot
+
+```
 
 ## Components of a Plot
 
@@ -683,29 +669,35 @@ ggplot(df, aes(x = gender, y = age, fill = gender)) +
 ## Components of a Plot
 
 ::: incremental
--   The data for the plot comes from the **emergency** dataset
+-   The data for the plot comes from the [emergency]{.bold-highlight} dataset
 
 -   The plot contains a x and y coordinate system
 
-    -   A categorical X describing **gender** (Male, Female)
-    -   A numeric Y describing the **age**
+    -   A categorical X describing [gender]{.bold-highlight} (Male, Female)
+    -   A numeric Y describing the [age]{.bold-highlight}
 
 -   The plot contains a color
 
-    -   The color differs by **gender**
+    -   The color differs by [gender]{.bold-highlight}
 
--   The plot is being depicted using a **dotplot** (geometries)
+-   The plot is being depicted using a [dotplot]{.bold-highlight} (geometries)
 :::
+
+# The Grammar of Graphics
 
 ## The Grammar of Graphics {.smaller}
 
 ::: columns
 ::: {.column width="50%"}
+
+::: incremental
 -   The grammar of graphics was originally proposed by Leland Wilkinson
 
 -   A variation of this framework was further proposed by Hadley Wickham which is used in ggplot2
 
 -   This framework is a tool that allows us to concisely describe the components of a plot or graphic
+:::
+
 :::
 
 ::: {.column width="50%"}
@@ -714,8 +706,6 @@ knitr::include_graphics('figures/screenshots/grammar_of_graphics_book.jpg')
 ```
 :::
 :::
-
-# The Grammar of Graphics
 
 ## The Grammar of Graphics
 
@@ -727,7 +717,15 @@ knitr::include_graphics("figures/ggplot_grammar_layers.PNG")
 
 ```{r, echo = T, eval = T, out.width='100%', fig.width=6, fig.height=4}
 #| output-location: column
-#| code-line-numbers: '1-2'
+#| code-line-numbers: '1'
+ggplot(data = df)
+```
+
+## The Grammar of Graphics {.smaller}
+
+```{r, echo = T, eval = T, out.width='100%', fig.width=6, fig.height=4}
+#| output-location: column
+#| code-line-numbers: '2'
 ggplot(data = df, 
        mapping = aes(x = gender, y = age, fill = gender))
 ```
@@ -789,7 +787,7 @@ ggplot(data = df,
 
 ## Website
 
-```{r, out.width = '70%', echo = F, fig.align='center'}
+```{r, out.width = '75%', echo = F, fig.align='center'}
 knitr::include_graphics("figures/ggplot_website.PNG")
 ```
 
@@ -799,7 +797,7 @@ knitr::include_graphics("figures/ggplot_website.PNG")
 
 ## Cheatsheet
 
-```{r, out.width='45%', echo = F, fig.align='center'}
+```{r, out.width='60%', echo = F, fig.align='center'}
 knitr::include_graphics("figures/ggplot2_cheatsheet.PNG")
 ```
 
