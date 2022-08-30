@@ -37,7 +37,7 @@ library(aRtsy)
 
 [Introduction to plotting in the tidyverse: ggplot2]{.red}
 
-Michael Luu, MPH | Marcio Diniz, PhD
+Michael Luu, MPH \| Marcio Diniz, PhD
 
 `r format(Sys.Date(), '%B %d, %Y')`
 
@@ -501,100 +501,153 @@ canvas_function(colors = colorPalette("tuscany1"))
 <!-- ## ggplot2 -->
 
 <!-- ```{r, echo = F} -->
+
 <!-- out <- local({ -->
+
 <!--   df <- read_csv(here::here("data/emergency.csv")) -->
 
 <!--   df <- df %>% -->
+
 <!--     mutate( -->
+
 <!--       gender = factor(gender, levels = 0:1, labels = c("Male", "Female")), -->
+
 <!--       death = factor(death, levels = 0:1, labels = c("Alive", "Died")) -->
+
 <!--     ) -->
 
 <!--   dotplot <- ggplot(df, aes(x = death, y = age, fill = death)) + -->
+
 <!--     geom_dotplot(binwidth = 1, binaxis = "y", stackdir = "center") + -->
+
 <!--     labs(x = "Death", y = "Age") + -->
+
 <!--     theme_light(base_size = 15) + -->
+
 <!--     theme( -->
+
 <!--       legend.position = "none", -->
+
 <!--       axis.title = element_text(face = "bold") -->
+
 <!--     ) + -->
+
 <!--     ggsci::scale_fill_d3() -->
 
 <!--   histogram <- ggplot(df, aes(x = age)) + -->
+
 <!--     geom_histogram(binwidth = 1) + -->
+
 <!--     labs(x = "Age", y = "Count (n)") + -->
+
 <!--     theme_light(base_size = 15) + -->
+
 <!--     theme( -->
+
 <!--       legend.position = "none", -->
+
 <!--       axis.title = element_text(face = "bold") -->
+
 <!--     ) + -->
+
 <!--     ggsci::scale_fill_d3() -->
 
 <!--   boxplot <- ggplot(df, aes(x = gender, y = hr, color = gender)) + -->
+
 <!--     geom_boxplot(width = .25) + -->
+
 <!--     labs(x = "Gender", y = "Heart Rate") + -->
+
 <!--     theme_light(base_size = 15) + -->
+
 <!--     theme( -->
+
 <!--       legend.position = "none", -->
+
 <!--       axis.title = element_text(face = "bold") -->
+
 <!--     ) + -->
+
 <!--     ggsci::scale_color_d3() -->
 
 <!--   barplot <- ggplot(df, aes(x = gender, fill = gender)) + -->
+
 <!--     geom_bar(width = .5) + -->
+
 <!--     labs(x = "Gender", y = "Count (n)") + -->
+
 <!--     theme_light(base_size = 15) + -->
+
 <!--     theme( -->
+
 <!--       legend.position = "none", -->
+
 <!--       axis.title = element_text(face = "bold"), -->
+
 <!--       panel.grid.major.x = element_blank() -->
+
 <!--     ) + -->
+
 <!--     ggsci::scale_fill_d3() -->
 
 <!--   tibble::lst(dotplot, histogram, boxplot, barplot) -->
+
 <!-- }) -->
+
 <!-- ``` -->
 
 <!-- # Dotplot -->
 
 <!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
+
 <!-- out$dotplot -->
+
 <!-- ``` -->
 
 <!-- --- -->
+
 <!-- # Histogram -->
 
 <!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
+
 <!-- out$histogram -->
+
 <!-- ``` -->
 
 <!-- --- -->
+
 <!-- # Boxplot -->
 
 <!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
+
 <!-- out$boxplot -->
+
 <!-- ``` -->
 
 <!-- --- -->
+
 <!-- # Barplot -->
 
 <!-- ```{r, echo = F, fig.height=5, fig.width=10, out.width='90%'} -->
+
 <!-- out$barplot -->
+
 <!-- ``` -->
 
 ## Objective {.smaller}
 
-* We won't be able to cover how to create all the various types of plots
+-   We won't be able to cover how to create all the various types of plots
 
-* The goal is to provide you with the understanding of the basic components and tools on **HOW** these plots are created using ggplot2
+-   The goal is to provide you with the understanding of the basic components and tools on **HOW** these plots are created using ggplot2
 
-* Plots we will go over:
-  + Dotplots
-  + Histograms
-  + Boxplots
-  + Barplots
+-   Plots we will go over:
 
-*  **All plots in ggplot2 are built upon the same fundamental principals and concepts**
+    -   Dotplots
+    -   Histograms
+    -   Boxplots
+    -   Barplots
+
+-   **All plots in ggplot2 are built upon the same fundamental principals and concepts**
 
 ## Components of a Plot
 
@@ -616,11 +669,11 @@ df %>% print(width = 80, n = 10)
 
 ## Components of a Plot
 
-```{r, out.width='90%', fig.width=10, fig.height=5, echo = F, fig.retina=2}
+```{r, out.width='100%', fig.width=10, fig.height=5, echo = F, fig.retina=2}
 
 ggplot(df, aes(x = gender, y = age, fill = gender)) +
   geom_dotplot(binaxis = 'y', binwidth = 1, stackdir = 'center') +
-  theme_light(base_size = 15) +
+  theme_light(base_size = 20) +
   labs(x = NULL, y = 'Age') +
   theme(legend.position = 'none',
         axis.title = element_text(face = 'bold'))
@@ -630,39 +683,36 @@ ggplot(df, aes(x = gender, y = age, fill = gender)) +
 ## Components of a Plot
 
 ::: incremental
-* The data for the plot comes from the **emergency** dataset
+-   The data for the plot comes from the **emergency** dataset
 
-* The plot contains a x and y coordinate system
-  + A categorical X describing **gender** (Male, Female)
-  + A numeric Y describing the **age**
+-   The plot contains a x and y coordinate system
 
-* The plot contains a color
-  + The color differs by **gender**
+    -   A categorical X describing **gender** (Male, Female)
+    -   A numeric Y describing the **age**
 
-* The plot is being depicted using a **dotplot** (geometries)
+-   The plot contains a color
+
+    -   The color differs by **gender**
+
+-   The plot is being depicted using a **dotplot** (geometries)
 :::
 
-
-## The Grammar of Graphics  {.smaller}
+## The Grammar of Graphics {.smaller}
 
 ::: columns
+::: {.column width="50%"}
+-   The grammar of graphics was originally proposed by Leland Wilkinson
 
-::: {.column width='50%'}
+-   A variation of this framework was further proposed by Hadley Wickham which is used in ggplot2
 
-* The grammar of graphics was originally proposed by Leland Wilkinson
-
-* A variation of this framework was further proposed by Hadley Wickham which is used in ggplot2
-
-* This framework is a tool that allows us to concisely describe the components of a plot or graphic
-
+-   This framework is a tool that allows us to concisely describe the components of a plot or graphic
 :::
 
-::: {.column width='50%'}
+::: {.column width="50%"}
 ```{r, echo = F, out.width='50%', fig.align='center'}
 knitr::include_graphics('figures/screenshots/grammar_of_graphics_book.jpg')
 ```
 :::
-
 :::
 
 # The Grammar of Graphics
@@ -683,15 +733,13 @@ ggplot(data = df,
 ```
 
 ::: notes
+-   Recall the data is coming from the **emergency** dataset
 
-- Recall the data is coming from the **emergency** dataset
+-   The X component is the caterogical (factor) **gender** column
 
-- The X component is the caterogical (factor) **gender** column
+-   The Y component is the numeric **age** column
 
-- The Y component is the numeric **age** column
-
-- The fill component is the **gender** column
-
+-   The fill component is the **gender** column
 :::
 
 ## The Grammar of Graphics {.smaller}
