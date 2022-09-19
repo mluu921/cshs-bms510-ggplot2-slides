@@ -7,10 +7,10 @@ format:
     footer: "Introduction to plotting in the tidyverse: ggplot2"
     menu: true
     overview: true
-    chalkboard: true
+    chalkboard: false
     preview-links: auto
 date: "`r format(Sys.Date(), '%B %d, %Y')`"
-chalkboard: true
+self-contained: true
 cache: false
 ---
 
