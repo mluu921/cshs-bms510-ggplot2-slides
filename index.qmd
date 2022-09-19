@@ -31,6 +31,19 @@ library(lubridate)
 library(ggsci)
 library(aRtsy)
 
+# students for word cloud
+students <-
+  c("Inga",
+    "Beyza",
+    "Basia",
+    "Maya",
+    "Na Jeong",
+    "Roberta",
+    "Nimisha",
+    "Elena",
+    "Nick")
+
+
 ```
 
 # [Descriptive Statistics in R]{.r-fit-text}
@@ -88,21 +101,7 @@ local({
 ```{r, echo = F, fig.height=5, fig.width=7, out.width='80%', fig.align='center'}
 
 local({
-  students <-
-    c(
-      "Inga",
-      "Beyza",
-      "Basia",
-      "Maya",
-      "Na Jeong",
-      "Roberta",
-      "Nimisha",
-      "Elena",
-      "Nick"
-    )
-
-
-  set.seed(as.numeric(Sys.Date()))
+  set.seed(5)
   data <- tibble(
     names = students,
     values = sample(1:100, length(students), replace = F)
