@@ -1,0 +1,12 @@
+---
+title: cshs-bms510-ggplot2-slides
+format: gfm
+---
+
+This repository is for the slides and notes for the CSHS BMS510 - Biostatistics, ggplot2 R class
+
+```{r}
+#| echo: false
+knitr::include_url('https://mluu921.github.io/cshs-bms510-ggplot2-slides/#/descriptive-statistics-in-r')
+```
+
