@@ -101,7 +101,7 @@ local({
 ```{r, echo = F, fig.height=5, fig.width=7, out.width='80%', fig.align='center'}
 
 local({
-  set.seed(5)
+  set.seed(2)
   data <- tibble(
     names = students,
     values = sample(1:100, length(students), replace = F)
@@ -109,13 +109,11 @@ local({
 
   ggplot(data, aes(
     label = names,
-    color = values,
-    size = values
+    color = names
   )) +
-    geom_text_wordcloud() +
-    scale_size_area(max_size = 30) +
+    geom_text_wordcloud(size = 20) +
     theme_minimal() +
-    scale_color_viridis_c()
+    ggsci::scale_color_d3()
 })
 ```
 
