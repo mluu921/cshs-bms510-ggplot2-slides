@@ -9,7 +9,7 @@ format:
     overview: true
     chalkboard: false
     preview-links: auto
-date: "`r format(Sys.Date(), '%B %d, %Y')`"
+date: today
 self-contained: true
 cache: false
 ---
